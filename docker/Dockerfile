@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-ros2-controllers \
     ros-${ROS_DISTRO}-tf-transformations \
     ros-${ROS_DISTRO}-pal-statistics \
-    vim \
+    ros-${ROS_DISTRO}-ros2-control-cmake \
+    vim ros-${ROS_DISTRO}-rqt ros-${ROS_DISTRO}-graph ros-${ROS_DISTRO}-rqt-common-plugins \
     && apt-get install -y ros-${ROS_DISTRO}-moveit-* --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
@@ -31,8 +32,12 @@ RUN mkdir -p ${COLCON_WS}/src && \
     cd ${COLCON_WS}/src && \
     git clone -b jazzy https://github.com/ROBOTIS-GIT/dynamixel_hardware_interface.git && \
     git clone -b jazzy https://github.com/ROBOTIS-GIT/dynamixel_interfaces.git && \
-    git clone -b jazzy https://github.com/ROBOTIS-GIT/DynamixelSDK.git && \
+    git clone -b jazzy https://github.com/ROBOTIS-GIT/DynamixelSDK.git  && \
     git clone -b jazzy https://github.com/ROBOTIS-GIT/open_manipulator.git
+
+
+# Copy the local open_manipulator repository
+# COPY --chown=root:root .. ${COLCON_WS}/src/open_manipulator
 
 # Clone gz_ros2_control only if WITH_GAZEBO is true
 RUN if [ "$WITH_GAZEBO" = "true" ]; then \
