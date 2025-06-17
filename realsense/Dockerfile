@@ -199,6 +199,10 @@ RUN apt-get update && \
 # RUN pip install setuptools==68.1.2
 # RUN pip install 'numpy<2'
 
+# Install ros2 usb-cam
+RUN apt-get update && apt-get install ros-${ROS_DISTRO}-usb-cam -y && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc  && \
     echo "source ${COLCON_WS}/install/setup.bash" >> ~/.bashrc  && \
     echo "alias cb='colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release'" >> ~/.bashrc 
