@@ -47,7 +47,7 @@ services:
       - /dev:/dev
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
-      - /home/aki/workspace/research/open_manipulator:/root/colcon_ws/src/open_manipulator
+      - /home/aki/workspace/research/open_manipulator:/root/ros2_ws/src/open_manipulator
 
     privileged: true
     command: bash
