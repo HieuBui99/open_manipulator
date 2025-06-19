@@ -4,6 +4,7 @@ ARG TARGETARCH
 FROM ros:jazzy-ros-base AS base-amd64
 FROM ros:jazzy-ros-base AS base-arm64
 
+
 # Select the appropriate base image based on TARGETARCH
 FROM base-${TARGETARCH} AS base
 
@@ -155,17 +156,6 @@ RUN apt-get update && apt-get install -y \
     libglfw3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-
-# Define build argument for Gazebo support
-ARG WITH_GAZEBO=true
-
-# Install common system dependencies
-
-# Install Gazebo dependencies conditionally
-RUN if [ "$WITH_GAZEBO" = "true" ]; then \
-    apt-get update && apt-get install -y ros-${ROS_DISTRO}-gz* \
-    && rm -rf /var/lib/apt/lists/*; \
-    fi
 
 ENV COLCON_WS=/root/ros2_ws
 WORKDIR ${COLCON_WS}
