@@ -1,11 +1,10 @@
 services:
-  ros2:
+  open_manipulator:
     container_name: open_manipulator
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - WITH_GAZEBO=${WITH_GAZEBO:-true}
+    image: robotis/open-manipulator:latest
     tty: true
     cap_add:
       - SYS_NICE
@@ -22,32 +21,8 @@ services:
       - ./workspace:/workspace
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+      - ../:/root/ros2_ws/src/open_manipulator/
       - /home/aki/workspace/research/open_manipulator:/root/colcon_ws/src/open_manipulator
       - /home/aki/workspace/research/lerobot:/root/colcon_ws/src/lerobot
-    privileged: true
-    command: bash
-
-  camera:
-    container_name: open_manipulator_camera
-    build:
-      context: ../realsense
-      dockerfile: Dockerfile
-    tty: true
-    cap_add:
-      - SYS_NICE
-    ulimits:
-      rtprio: 99
-      rttime: -1
-      memlock: 8428281856
-    network_mode: host
-    environment:
-     - DISPLAY=${DISPLAY}
-     - QT_X11_NO_MITSHM=1
-    volumes:
-      - /dev:/dev
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
-      - /home/aki/workspace/research/open_manipulator:/root/ros2_ws/src/open_manipulator
-
     privileged: true
     command: bash
