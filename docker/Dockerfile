@@ -107,6 +107,10 @@ RUN bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && \
     cd ${COLCON_WS} && \
     colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release"
 
+RUN git clone https://github.com/huggingface/lerobot.git && \
+    cd lerobot && \
+    pip install --ignore-installed -e .
+    
 RUN pip install setuptools==68.1.2 opencv-contrib-python transforms3d
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc  && \
