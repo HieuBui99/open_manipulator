@@ -1,4 +1,4 @@
-FROM ros:jazzy-ros-base AS librealsense-builder
+FROM robotis/ros:jazzy-ros-base-torch2.7.0-cuda12.8.0 AS librealsense-builder
 
 # ARG LIBRS_VERSION=2.56.3
 # # Make sure that we have a version number of librealsense as argument
@@ -65,7 +65,7 @@ RUN cd /usr/src/librealsense \
     && make install
 
 # Use the base ROS2 Jazzy image
-FROM ros:jazzy-ros-base AS open-manipulator
+FROM robotis/ros:jazzy-ros-base-torch2.7.0-cuda12.8.0 AS open-manipulator
 
 COPY --from=librealsense-builder /opt/librealsense /usr/local/
 COPY --from=librealsense-builder /usr/local/lib/python3.12/dist-packages/pyrealsense2 /usr/local/lib/python3.12/dist-packages/pyrealsense2
@@ -80,6 +80,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     libusb-1.0-0-dev \
     libglfw3-dev \
+    ros-${ROS_DISTRO}-tf-transformations \
+    vim \
+    nano \
     && rm -rf /var/lib/apt/lists/*
 
 ENV COLCON_WS=/root/ros2_ws
@@ -103,6 +106,8 @@ RUN cd ${COLCON_WS} && \
 RUN bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && \
     cd ${COLCON_WS} && \
     colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release"
+
+RUN pip install setuptools==68.1.2 opencv-contrib-python transforms3d
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc  && \
     echo "source ${COLCON_WS}/install/setup.bash" >> ~/.bashrc  && \
